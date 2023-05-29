@@ -13,6 +13,10 @@
             margin-top: 50px;
         }
 
+        h2 {
+            margin-top: 30px;
+        }
+
         label {
             font-weight: bold;
         }
@@ -42,10 +46,13 @@
             color: red;
         }
 
-        section{
+        section {
             width: 80%;
             margin: auto;
             margin-top: 50px;
+        }
+        .bolder{
+            font-size: 20px;
         }
     </style>
     <script>
@@ -99,9 +106,18 @@
                     }
                 }
             }
+            outputDiv.innerHTML += "</br><p class='bolder'>Total Codes: " + totalCodigos + "</p>";
+            outputDiv.innerHTML += "<p class='bolder'>Total Value: " + valorTotal.toFixed(2) + "</p>";
 
-            outputDiv.innerHTML += "<p>Total Codes: " + totalCodigos + "</p>";
-            outputDiv.innerHTML += "<p>Total Value: " + valorTotal.toFixed(2) + "</p>";
+            outputDiv.innerHTML += "<h2>Copy Codes:</h2>";
+            var codesCopy = Array.from(duplicities);
+            for (var j = 0; j < codesCopy.length; j += 15) {
+                var codesSlice = codesCopy.slice(j, j + 15);
+                var codesString = codesSlice.join("<br>");
+                outputDiv.innerHTML += "<p>" + codesString + "</p>";
+            }
+
+            
         }
     </script>
 </head>
@@ -113,6 +129,5 @@
         <button onclick="processPaymentCodes()">Add Codes</button>
         <div id="output"></div>
     </section>
-    
 </body>
 </html>
