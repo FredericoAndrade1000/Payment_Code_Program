@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Payment Code Program</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #output {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f2f2f2;
+            font-size: 14px;
+        }
+
+        .error {
+            color: red;
+        }
+
+        section{
+            width: 80%;
+            margin: auto;
+        }
+    </style>
+    <script>
+        function validarCodigo(code) {
+            if (code.length === 155 || code.length === 156) {
+                code = code.trim();
+                if (code[43] === ' ') {
+                    code = code.substr(0, 43) + code.substr(44);
+                }
+                return code;
+            } else {
+                return null;
+            }
+        }
+
+        function getValue(string) {
+            var newValue = string.substr(79, string.length - 79 - 71);
+            return newValue;
+        }
+
+        function processPaymentCodes() {
+            var codesTextarea = document.getElementById("codes");
+            var outputDiv = document.getElementById("output");
+            var codes = codesTextarea.value.split("\n");
+            var valorTotal = 0;
+            var totalCodigos = 0;
+            var duplicities = new Set();
+
+            outputDiv.innerHTML = "";
+
+            for (var i = 0; i < codes.length; i++) {
+                var code = validarCodigo(codes[i]);
+                if (code) {
+                    var value = parseFloat(getValue(code));
+                    valorTotal += value;
+                    totalCodigos++;
+
+                    if (duplicities.has(code)) {
+                        var errorMessage = "Duplicity: " + code;
+                        var errorElement = document.createElement("p");
+                        errorElement.className = "error";
+                        errorElement.textContent = errorMessage;
+                        outputDiv.appendChild(errorElement);
+                    } else {
+                        duplicities.add(code);
+
+                        var codeInfo = "Code: " + code + " | Value: " + value.toFixed(2);
+                        var codeElement = document.createElement("p");
+                        codeElement.textContent = codeInfo;
+                        outputDiv.appendChild(codeElement);
+                    }
+                }
+            }
+
+            outputDiv.innerHTML += "<p>Total Codes: " + totalCodigos + "</p>";
+            outputDiv.innerHTML += "<p>Total Value: " + valorTotal.toFixed(2) + "</p>";
+        }
+    </script>
+</head>
+<body>
+    <h1>Payment Code Program</h1>
+    <section>
+        <label for="codes">Payment Codes:</label>
+        <textarea id="codes" placeholder="Add payment codes, one per line"></textarea>
+        <button onclick="processPaymentCodes()">Add Codes</button>
+        <div id="output"></div>
+    </section>
+    
+</body>
+</html>
